@@ -175,7 +175,7 @@ export default function Profile() {
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
           alt="profile"
-          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
+          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2 shadow-2xl"
         />
         <p className="text-sm self-center">
           {fileUploadError ? (
@@ -195,7 +195,7 @@ export default function Profile() {
           placeholder="username"
           defaultValue={currentUser.username}
           id="username"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg shadow-2xl"
           onChange={handleChange}
         />
         <input
@@ -203,7 +203,7 @@ export default function Profile() {
           placeholder="email"
           id="email"
           defaultValue={currentUser.email}
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg shadow-2xl"
           onChange={handleChange}
         />
         <input
@@ -211,7 +211,7 @@ export default function Profile() {
           placeholder="password"
           onChange={handleChange}
           id="password"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg shadow-2xl"
         />
         <button
           disabled={loading}

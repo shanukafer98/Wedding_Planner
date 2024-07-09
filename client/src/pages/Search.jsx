@@ -95,28 +95,26 @@ export default function Search() {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen w-1/4">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-10 ">
-          <div className="flex items-center gap-4">
-            <label className=" font-semibold w-1/3">
-              Search Term:
-            </label>
+      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen md:w-1/4 w-full">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <label className="font-semibold md:w-1/3 w-full">Search Term:</label>
             <input
               type="text"
               id="searchTerm"
               placeholder="Search..."
-              className="border rounded-lg p-3 w-2/3"
+              className="border rounded-lg p-3 w-full shadow-2xl"
               value={sidebardata.searchTerm}
               onChange={handleChange}
             />
           </div>
-          <div className="flex  gap-4 items-center ">
-            <label className="font-semibold w-1/3">Category:</label>
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            <label className="font-semibold md:w-1/3 w-full">Category:</label>
             <select
               id="categorie"
               value={sidebardata.categorie}
               onChange={handleChange}
-              className="border rounded-lg p-3 w-2/3"
+              className="border rounded-lg p-3 w-full shadow-2xl"
             >
               <option value="">All Services</option>
               <option value="dj">DJ</option>
@@ -127,13 +125,13 @@ export default function Search() {
               <option value="decoration">Decoration</option>
             </select>
           </div>
-          <div className="flex items-center gap-2">
-            <label className="font-semibold w-1/3">District:</label>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <label className="font-semibold md:w-1/3 w-full">District:</label>
             <select
               id="district"
               value={sidebardata.district}
               onChange={handleChange}
-              className="border rounded-lg p-3 w-2/3"
+              className="border rounded-lg p-3 w-full shadow-2xl"
             >
               <option value="">All District</option>
               <option value="ampara">Ampara</option>
@@ -163,14 +161,13 @@ export default function Search() {
               <option value="vavuniya">Vavuniya</option>
             </select>
           </div>
-          <div className="flex items-center gap-2">
-            <label className="font-semibold w-1/3">Sort:</label>
-            <select onChange={handleChange} value={sidebardata.sort} id="sort" className="border rounded-lg p-3 w-2/3">
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <label className="font-semibold md:w-1/3 w-full">Sort:</label>
+            <select onChange={handleChange} value={sidebardata.sort} id="sort" className="border rounded-lg p-3 w-full shadow-2xl">
               <option value="createdAt_desc">Newest First</option>
               <option value="createdAt_asc">Oldest First</option>
             </select>
           </div>
-
           <button
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-900 p-3 rounded-lg"
@@ -183,14 +180,14 @@ export default function Search() {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <div className="grid grid-cols-3 ">
+          <div className="grid  sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-2">
             {listings.map((listing) => (
-              <ListingItem key={listing._id} listing={listing}  className = "shadow-2xl"/>
+              <ListingItem key={listing._id} listing={listing} className="shadow-2xl" />
             ))}
             {showMore && (
               <button
                 onClick={onShowMoreClick}
-                className="bg-blue-500 hover:bg-blue-900 text-white p-3 rounded-lg"
+                className="bg-blue-500 hover:bg-blue-900 text-white p-3 rounded-lg col-span-full"
               >
                 Show More
               </button>

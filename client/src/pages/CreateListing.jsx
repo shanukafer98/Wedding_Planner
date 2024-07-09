@@ -8,6 +8,7 @@ import {
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -26,16 +27,17 @@ export default function CreateListing() {
     contactNumber1: "", // Adding contact number fields
     contactNumber2: "", // Adding contact number fields
   });
-  const [imageUploadError, setImageUploadError] = useState(false);
-  const [videoUploadError, setVideoUploadError] = useState(false);
-  const [uploading, setUploading] = useState(false);
+
+  const [imageUploading, setImageUploading] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
+
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
-      setUploading(true);
-      setImageUploadError(false);
+      setImageUploading(true);
+
       const promises = [];
 
       for (let i = 0; i < files.length; i++) {
@@ -47,16 +49,22 @@ export default function CreateListing() {
             ...formData,
             imageUrls: formData.imageUrls.concat(urls),
           });
-          setImageUploadError(false);
-          setUploading(false);
+   
+          setImageUploading(false);
+         
         })
         .catch((err) => {
-          setImageUploadError("Image upload failed (2 mb max per image)");
-          setUploading(false);
+          
+          setImageUploading(false);
+          toast.error("Image upload failed (2 mb max per image)");
         });
     } else {
-      setImageUploadError("You can only upload 6 images per listing");
-      setUploading(false);
+
+      setImageUploading(false);
+     
+      toast('Please select an image to upload!', {
+        icon: '💡',
+      });
     }
   };
 
@@ -64,26 +72,33 @@ export default function CreateListing() {
     if (video) {
       if (video.size > 100 * 1024 * 1024) {
         // 100 MB size limit
-        setVideoUploadError("Video size should be under 100 MB");
+ 
+        toast.error("Video size should be under 100 MB");
         return;
       }
-      setUploading(true);
-      setVideoUploadError(false);
+      setVideoUploading(true);
+
       storeMedia(video)
         .then((url) => {
           setFormData({
             ...formData,
             videoUrl: url,
           });
-          setVideoUploadError(false);
-          setUploading(false);
+  
+          setVideoUploading(false);
+         
         })
         .catch((err) => {
-          setVideoUploadError("Video upload failed (100 mb max per video)");
-          setUploading(false);
+      
+          setVideoUploading(false);
+          toast.error("Video upload failed (100 mb max per video)");
         });
     } else {
-      setVideoUploadError("Please select a video to upload");
+    
+     
+      toast('Please select an  to upload!', {
+        icon: '💡',
+      });
     }
   };
 
@@ -93,20 +108,31 @@ export default function CreateListing() {
       const fileName = new Date().getTime() + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-        },
-        (error) => {
-          reject(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
-          });
+      toast.promise(
+        new Promise((resolvePromise, rejectPromise) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log(`Upload is ${progress}% done`);
+            },
+            (error) => {
+              rejectPromise(error);
+              reject(error);
+            },
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                resolvePromise(downloadURL);
+                resolve(downloadURL);
+              });
+            }
+          );
+        }),
+        {
+          loading: "Uploading...",
+          success: "Upload successful!",
+       
         }
       );
     });
@@ -244,15 +270,16 @@ export default function CreateListing() {
               id="categorie"
               className="border p-3 rounded-lg"
               onChange={handleChange}
-              value={formData.categorie}// value categorie
+              value={formData.categorie} // value categorie
             >
-              <option value="dj">DJ</option>
+               <option value="dj">DJ</option>
               <option value="hotel">Hotel</option>
               <option value="catering">Catering</option>
               <option value="photography">Photography</option>
               <option value="venue">Venue</option>
               <option value="decoration">Decoration</option>
-              {/* Add more options as needed */}
+              <option value="weddingCake">Cake</option>
+              <option value="vehicleRental">Vehicle Rental</option>
             </select>
           </div>
           <div className="flex flex-col gap-4">
@@ -263,46 +290,44 @@ export default function CreateListing() {
               id="district"
               className="border p-3 rounded-lg"
               onChange={handleChange}
-              value={formData.district}
+              value={formData.district} // value district
             >
-              <option value="">Select a district</option>
-              <option value="ampara">Ampara</option>
-              <option value="anuradhapura">Anuradhapura</option>
-              <option value="badulla">Badulla</option>
-              <option value="batticaloa">Batticaloa</option>
-              <option value="colombo">Colombo</option>
-              <option value="galle">Galle</option>
-              <option value="gampaha">Gampaha</option>
-              <option value="hambantota">Hambantota</option>
-              <option value="jaffna">Jaffna</option>
-              <option value="kalutara">Kalutara</option>
-              <option value="kandy">Kandy</option>
-              <option value="kegalle">Kegalle</option>
-              <option value="kilinochchi">Kilinochchi</option>
-              <option value="kurunegala">Kurunegala</option>
-              <option value="mannar">Mannar</option>
-              <option value="matale">Matale</option>
-              <option value="matara">Matara</option>
-              <option value="monaragala">Monaragala</option>
-              <option value="mullaitivu">Mullaitivu</option>
-              <option value="nuwara eliya">Nuwara Eliya</option>
-              <option value="polonnaruwa">Polonnaruwa</option>
-              <option value="puttalam">Puttalam</option>
-              <option value="ratnapura">Ratnapura</option>
-              <option value="trincomalee">Trincomalee</option>
-              <option value="vavuniya">Vavuniya</option>
-              {/* Add more options as needed */}
+              <option value="Ampara">Ampara</option>
+              <option value="Anuradhapura">Anuradhapura</option>
+              <option value="Badulla">Badulla</option>
+              <option value="Batticaloa">Batticaloa</option>
+              <option value="Colombo">Colombo</option>
+              <option value="Galle">Galle</option>
+              <option value="Gampaha">Gampaha</option>
+              <option value="Hambantota">Hambantota</option>
+              <option value="Jaffna">Jaffna</option>
+              <option value="Kalutara">Kalutara</option>
+              <option value="Kandy">Kandy</option>
+              <option value="Kegalle">Kegalle</option>
+              <option value="Kilinochchi">Kilinochchi</option>
+              <option value="Kurunegala">Kurunegala</option>
+              <option value="Mannar">Mannar</option>
+              <option value="Matale">Matale</option>
+              <option value="Matara">Matara</option>
+              <option value="Monaragala">Monaragala</option>
+              <option value="Mullaitivu">Mullaitivu</option>
+              <option value="Nuwara Eliya">Nuwara Eliya</option>
+              <option value="Polonnaruwa">Polonnaruwa</option>
+              <option value="Puttalam">Puttalam</option>
+              <option value="Ratnapura">Ratnapura</option>
+              <option value="Trincomalee">Trincomalee</option>
+              <option value="Vavuniya">Vavuniya</option>
             </select>
           </div>
           <div className="flex flex-col gap-4">
             <label htmlFor="contactNumber1" className="font-semibold">
-              Contact Number 1 (required):
+              Contact Number 1:
             </label>
             <input
-              type="String"
-              id="contactNumber1"
-              placeholder="Enter contact number"
+              type="text"
+              placeholder="Contact Number 1"
               className="border p-3 rounded-lg"
+              id="contactNumber1"
               required
               onChange={handleChange}
               value={formData.contactNumber1}
@@ -310,119 +335,113 @@ export default function CreateListing() {
           </div>
           <div className="flex flex-col gap-4">
             <label htmlFor="contactNumber2" className="font-semibold">
-              Contact Number 2 (optional):
+              Contact Number 2:
             </label>
             <input
-              type="String"
-              id="contactNumber2"
-              placeholder="Enter contact number"
+              type="text"
+              placeholder="Contact Number 2"
               className="border p-3 rounded-lg"
+              id="contactNumber2"
               onChange={handleChange}
               value={formData.contactNumber2}
             />
           </div>
         </div>
-        <div className="flex flex-col flex-1 gap-4">
-          <p className="font-semibold">
-            Images:
-            <span className="font-normal text-gray-600 ml-2">
-              The first image will be the cover (max 6)
-            </span>
-          </p>
-          <div className="flex gap-4">
+        <div className="flex flex-col gap-4 flex-1">
+          <div className="flex flex-col">
+            <label htmlFor="files" className="font-semibold">
+              Images (6 max):
+            </label>
             <input
-              onChange={(e) => setFiles(e.target.files)}
-              className="p-3 border border-gray-300 rounded w-full"
               type="file"
-              id="images"
-              accept="image/*"
+              accept=".jpg,.png,.jpeg"
+              id="files"
               multiple
+              className="p-3 border border-gray-300 rounded-lg"
+              onChange={(e) => setFiles(e.target.files)}
             />
             <button
               type="button"
-              disabled={uploading}
+              className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 mt-4"
               onClick={handleImageSubmit}
-              className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80"
             >
-              {uploading ? "Uploading..." : "Upload"}
+              Upload Images
             </button>
+           
           </div>
-          <p className="text-red-700 text-sm">
-            {imageUploadError && imageUploadError}
-          </p>
-          {formData.imageUrls.length > 0 &&
-            formData.imageUrls.map((url, index) => (
-              <div
-                key={url}
-                className="flex justify-between p-3 border items-center"
-              >
-                <img
-                  src={url}
-                  alt="listing image"
-                  className="w-20 h-20 object-contain rounded-lg"
+          {formData.imageUrls.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold">Uploaded Images:</h3>
+              <div className="flex flex-wrap gap-4 mt-2">
+                {formData.imageUrls.map((url, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={url}
+                      alt="uploaded"
+                      className="w-32 h-32 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                      onClick={() => handleRemoveImage(index)}
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="flex flex-col">
+            <label htmlFor="video" className="font-semibold">
+              Video (100 MB max):
+            </label>
+            <input
+              type="file"
+              accept="video/*"
+              id="video"
+              className="p-3 border border-gray-300 rounded-lg"
+              onChange={(e) => setVideo(e.target.files[0])}
+            />
+            <button
+              type="button"
+              className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 mt-4"
+              onClick={handleVideoSubmit}
+            >
+              Upload Video
+            </button>
+          
+          </div>
+          {formData.videoUrl && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold">Uploaded Video:</h3>
+              <div className="relative">
+                <video
+                  src={formData.videoUrl}
+                  controls
+                  className="w-full rounded-lg mt-2"
                 />
                 <button
                   type="button"
-                  onClick={() => handleRemoveImage(index)}
-                  className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75"
+                  className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
+                  onClick={handleRemoveVideo}
                 >
-                  Delete
+                  X
                 </button>
               </div>
-            ))}
-          <p className="font-semibold mt-6">
-            Video:
-            <span className="font-normal text-gray-600 ml-2">
-              You can upload 1 video (max 100 MB)
-            </span>
-          </p>
-          <div className="flex gap-4">
-            <input
-              onChange={(e) => setVideo(e.target.files[0])}
-              className="p-3 border border-gray-300 rounded w-full"
-              type="file"
-              id="videos"
-              accept="video/*"
-            />
-            <button
-              type="button"
-              disabled={uploading}
-              onClick={handleVideoSubmit}
-              className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80"
-            >
-              {uploading ? "Uploading..." : "Upload"}
-            </button>
-          </div>
-          <p className="text-red-700 text-sm">
-            {videoUploadError && videoUploadError}
-          </p>
-          {formData.videoUrl && (
-            <div className="flex justify-between p-3 border items-center">
-              <video
-                src={formData.videoUrl}
-                controls
-                className="w-20 h-20 object-contain rounded-lg"
-              />
-              <button
-                type="button"
-                onClick={handleRemoveVideo}
-                className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75"
-              >
-                Delete
-              </button>
             </div>
           )}
-          <button
-            disabled={loading || uploading}
-            className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
-          >
-            {loading ? "Creating..." : "Create listing"}
-          </button>
-          {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
       </form>
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+      <div className="text-center mt-4">
+        <button
+          disabled={loading || imageUploading || videoUploading}
+          className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          {loading ? "Creating..." : "Create listing"}
+        </button>
+      </div>
     </main>
   );
 }
-
-//updated

@@ -6,22 +6,22 @@ export default function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className='bg-yellow-600 shadow-md'>
+    <header className='bg-transparent-50 shadow-md'>
       <div className='flex justify-between items-center max-w-7xl mx-auto p-3'>
         <Link to='/'>
           <h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>
-            <span className='text-yellow-500'>රන්</span>
+            <span className='text-yellow-600'>රන්</span>
             <span className='text-slate-700'>හුය</span>
           </h1>
         </Link>
         <ul className='flex gap-4'>
           <Link to='/'>
-            <li className='hidden sm:inline text-slate-700 hover:underline hover:text-blue-700'>
+            <li className='hidden sm:inline text-slate-100 text-lg font-bold    hover:text-blue-700'>
               Home
             </li>
           </Link>
           <Link to='/about'>
-            <li className='hidden sm:inline text-slate-700 hover:underline hover:text-blue-700'>
+            <li className='hidden sm:inline text-slate-100  text-lg font-bold hover:text-blue-700'>
               About
             </li>
           </Link>

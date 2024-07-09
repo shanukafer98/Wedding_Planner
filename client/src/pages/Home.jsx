@@ -4,6 +4,7 @@ import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 import ListingItem from '../components/ListingItem';
+import {ring} from '../assets';
 
 
 export default function Home() {
@@ -149,33 +150,43 @@ export default function Home() {
   return (
     <div>
       {/* Top Section */}
-      <div className='relative overflow-hidden max-w-7xl mx-auto'>
-        {/* <video 
-          autoPlay 
-          loop 
-          muted 
-          className='absolute top-0 left-0 w-full h-full object-cover z-0'
-        >
-          <source src={videoBackground} type='video/mp4' />
-          Your browser does not support the video tag.
-        </video> */}
-        <div className='relative flex flex-col gap-6 p-28 px-3 max-w-7xl mx-auto bg-white bg-opacity-20 z-10'>
-          <h1 className='text-slate-700 font-bold text-2xl lg:text-4xl'>
-            Find the Perfect <span className='text-slate-500'>Wedding Services</span>
-            <br />
-            All Under One Roof
-          </h1>
-          <div className='text-gray-400 text-xs sm:text-sm'>
-            Mangalam is the best place to find all the wedding services you need for your special day.
-          </div>
-          <Link
-            to={'/search'}
-            className='text-xs sm:text-sm text-blue-800 font-bold hover:underline'
-          >
-            Let's get started...
-          </Link>
-        </div>
+      <div
+  // className='relative overflow-hidden max-w-7xl mx-auto shadow-2xl'
+  // style={{
+  //   backgroundImage: `url(${ring})`,
+  //   backgroundSize: 'cover',
+  //   backgroundPosition: 'center',
+  //   height: '700px',
+    
+  
+    
+  // }}
+>
+<div className='relative flex flex-col lg:flex-row gap-6 p-28 px-3 max-w-7xl mx-auto z-10 '>
+    <div className='flex flex-col gap-10 lg:w-2/3  pt-12'>
+      <h1 className='text-slate-700 font-bold sm:text-2xl lg:text-5xl'>
+        Find the Perfect <span className='text-slate-500'>Wedding Services</span>
+        <br />
+        All in One place
+      </h1>
+      <div className='text-gray-600 text-lg sm:text-1xl'>
+        Mangalam is the best place to find all the wedding services you need for your special day.
       </div>
+      <Link
+        to={'/search'}
+        className='text-xs sm:text-sm btn bg-blue-700 hover:bg-slate-900 text-white px-4 py-2 rounded-lg hover:opacity-95 w-fit'
+      >
+        Let's get started...
+      </Link>
+    </div>
+    <div className='flex justify-center lg:w-1/3'>
+      <img src={ring} alt='ring' className='w-[1000px] h-[400px]' />
+    </div>
+  </div>
+</div>
+
+
+
 
       {/* Listing results for featured, catering, and DJ */}
       <div className='max-w-7xl mx-auto p-3 flex flex-col gap-8 my-10'>
