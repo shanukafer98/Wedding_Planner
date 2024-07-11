@@ -9,44 +9,28 @@ import {ring} from '../assets';
 
 export default function Home() {
 
-  const [cateringListings, setCateringListings] = useState([]);
+ 
   const [djListings, setDjListings] = useState([]);
   const [hotelListings, setHotelListings] = useState([]);
   const [photographyListings, setPhotographyListings] = useState([]);
-  const [decorationListings, setDecorationListings] = useState([]);
-  const [ashatakaListings, setAshatakaListings] = useState([]);
-  const [vehicleRentalListings, setVehicleRentalListings] = useState([]);
-  const [weddingCakeListings, setWeddingCakeListings] = useState([]);
   const [venueListings, setVenueListings] = useState([]);
+  const[decorationListings, setDecorationListings] = useState([]);
+  const [poruwaListings, setPoruwaListings] = useState([]);
+  const [weddingCakeListings, setWeddingCakeListings] = useState([]);
+  const [vehicleRentalListings, setVehicleRentalListings] = useState([]);
+  const [ashatakaListings, setAshatakaListings] = useState([]);
+  const [dancingListings, setDancingListings] = useState([]);
+  const [beraListings, setBeraListings] = useState([]);
+
+
 
   
 
   SwiperCore.use([Navigation]);
 
-  //             <option value="dj">DJ</option>
-  //             <option value="hotel">Hotel</option>
-  //             <option value="catering">Catering</option>
-  //             <option value="photography">Photography</option>
-  //             <option value="venue">Venue</option>
-  //             <option value="decoration">Decoration</option>
-  //              <option value="ashataka">Decoration</option>
-  //  <option value="decoration">Vehicle Rental</option>
-  //  <option value="decoration">Wedding Cake</option>
-
 
   useEffect(() => {
   
-
-    const fetchCateringListings = async () => {
-      try {
-        const res = await fetch('/api/listing/get?categorie=catering&limit=4');
-        const data = await res.json();
-        setCateringListings(data);
-     
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
     const fetchDjListings = async () => {
       try {
@@ -136,6 +120,43 @@ export default function Home() {
       }
     };
 
+
+    const fetchPoruwaListings = async () => {
+      try {
+        const res = await fetch('/api/listing/get?categorie=poruwa&limit=4');
+        const data = await res.json();
+        setPoruwaListings(data);
+      }
+      catch (error) {
+        console.log(error);
+      }
+    };
+
+    const fetchDancingListings = async () => {
+      try {
+        const res = await fetch('/api/listing/get?categorie=dancing&limit=4');
+        const data = await res.json();
+        setDancingListings(data);
+      }
+      catch (error) {
+        console.log(error);
+      }
+    };  
+
+
+    const fetchBeraListings = async () => {
+      try {
+        const res = await fetch('/api/listing/get?categorie=bera&limit=4');
+        const data = await res.json();
+        setBeraListings(data);
+      }
+      catch (error) {
+        console.log(error);
+      }
+      
+    };
+
+
     fetchVenueListings();
     fetchWeddingCakeListings();
     fetchVehicleRentalListings();
@@ -143,8 +164,11 @@ export default function Home() {
     fetchDecorationListings();
     fetchPhotographyListings();
     fetchHotelListings();
-    fetchCateringListings();
     fetchDjListings();
+    fetchBeraListings();
+    fetchDancingListings();
+    fetchPoruwaListings();
+
   }, []);
 
   return (
@@ -204,20 +228,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        {cateringListings && cateringListings.length > 0 && (
-          <div>
-            <div className='my-3'>
-              <h2 className='text-2xl font-semibold text-slate-600'>Catering Listing</h2>
-              <Link className='text-sm text-blue-800 hover:underline' to={'/search?categorie=catering'}>Show more catering services</Link>
-            </div>
-            <div className='flex flex-wrap gap-4'>
-              {cateringListings.map((listing) => (
-                <ListingItem listing={listing} key={listing._id} />
-              ))}
-            </div>
-          </div>
-        )
-        }
+       
         {hotelListings && hotelListings.length > 0 && (
           <div>
             <div className='my-3'>
@@ -309,6 +320,47 @@ export default function Home() {
             </div>
           </div>
         )}
+          {poruwaListings && poruwaListings.length > 0 && (
+            <div>
+              <div className='my-3'>
+                <h2 className='text-2xl font-semibold text-slate-600'>Poruwa Listing</h2>
+                <Link className='text-sm text-blue-800 hover:underline' to={'/search?categorie=poruwa'}>Show more poruwa services</Link>
+              </div>
+              <div className='flex flex-wrap gap-4'>
+                {poruwaListings.map((listing) => (
+                  <ListingItem listing={listing} key={listing._id} />
+                ))}
+              </div>
+            </div>
+          )}
+            {dancingListings && dancingListings.length > 0 && (
+              <div>
+                <div className='my-3'>
+                  <h2 className='text-2xl font-semibold text-slate-600'>Dancing Listing</h2>
+                  <Link className='text-sm text-blue-800 hover:underline' to={'/search?categorie=dancing'}>Show more dancing services</Link>
+                </div>
+                <div className='flex flex-wrap gap-4'>
+                  {dancingListings.map((listing) => (
+                    <ListingItem listing={listing} key={listing._id} />
+                  ))}
+                </div>
+              </div>
+            )}
+              {beraListings && beraListings.length > 0 && (
+                <div>
+                  <div className='my-3'>
+                    <h2 className='text-2xl font-semibold text-slate-600'>Bera Listing</h2>
+                    <Link className='text-sm text-blue-800 hover:underline' to={'/search?categorie=bera'}>Show more bera services</Link>
+                  </div>
+                  <div className='flex flex-wrap gap-4'>
+                    {beraListings.map((listing) => (
+                      <ListingItem listing={listing} key={listing._id} />
+                    ))}
+                  </div>
+                </div>
+              )
+          }
+        
 
       
       </div>

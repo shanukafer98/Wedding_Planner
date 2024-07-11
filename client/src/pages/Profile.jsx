@@ -1,11 +1,6 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase";
 import {
   updateUserStart,
@@ -16,25 +11,17 @@ import {
   deleteUserSuccess,
   signOutUserStart,
 } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
-  const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
-
-  // firebase storage
-  // allow read;
-  // allow write: if
-  // request.resource.size < 2 * 1024 * 1024 &&
-  // request.resource.contentType.matches('image/.*')
 
   useEffect(() => {
     if (file) {
@@ -51,12 +38,11 @@ export default function Profile() {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
       },
       (error) => {
-        setFileUploadError(true);
+        toast.error("Error uploading image (image must be less than 2 MB)");
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
@@ -84,13 +70,14 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
+        toast.error(data.message);
         return;
       }
-
       dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
+      toast.success("User updated successfully!");
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      toast.error(error.message);
     }
   };
 
@@ -103,11 +90,14 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(deleteUserSuccess(data));
+      toast.success("User account deleted successfully!");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+      toast.error(error.message);
     }
   };
 
@@ -118,27 +108,28 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(deleteUserSuccess(data));
+      toast.success("Signed out successfully!");
     } catch (error) {
-      dispatch(deleteUserFailure(data.message));
+      dispatch(deleteUserFailure(error.message));
+      toast.error(error.message);
     }
   };
 
   const handleShowListings = async () => {
     try {
-      setShowListingsError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
-        setShowListingsError(true);
+        toast.error("There is no listings to show");
         return;
       }
-
       setUserListings(data);
     } catch (error) {
-      setShowListingsError(true);
+      toast.error("Error showing listings");
     }
   };
 
@@ -149,17 +140,16 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data.success === false) {
-        console.log(data.message);
+        toast.error(data.message);
         return;
       }
-
-      setUserListings((prev) =>
-        prev.filter((listing) => listing._id !== listingId)
-      );
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+      toast.success("Listing deleted successfully!");
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message);
     }
   };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -178,14 +168,10 @@ export default function Profile() {
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2 shadow-2xl"
         />
         <p className="text-sm self-center">
-          {fileUploadError ? (
-            <span className="text-red-700">
-              Error Image upload (image must be less than 2 mb)
-            </span>
-          ) : filePerc > 0 && filePerc < 100 ? (
-            <span className="text-slate-700">{`Uploading ${filePerc}%`}</span>
+          {filePerc > 0 && filePerc < 100 ? (
+            <span className="text-slate-700 text-lg">{`Uploading ${filePerc}%`}</span>
           ) : filePerc === 100 ? (
-            <span className="text-green-700">Image successfully uploaded!</span>
+            <span className="text-green-700 text-lg">Image successfully uploaded!</span>
           ) : (
             ""
           )}
@@ -220,7 +206,7 @@ export default function Profile() {
           {loading ? "Loading..." : "Update"}
         </button>
         <Link
-          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+          className="bg-slate-500 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
           to={"/create-listing"}
         >
           Create Listing
@@ -229,25 +215,20 @@ export default function Profile() {
       <div className="flex justify-between mt-5">
         <span
           onClick={handleDeleteUser}
-          className="text-red-700 cursor-pointer"
+          className="bg-blue-600 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
         >
           Delete account
         </span>
-        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+        <span onClick={handleSignOut} className="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 rounded">
           Sign out
         </span>
       </div>
 
-      <p className="text-red-700 mt-5">{error ? error : ""}</p>
-      <p className="text-green-700 mt-5">
-        {updateSuccess ? "User is updated successfully!" : ""}
-      </p>
-      <button onClick={handleShowListings} className="text-green-700 w-full">
-        Show Listings
-      </button>
-      <p className="text-red-700 mt-5">
-        {showListingsError ? "Error showing listings" : ""}
-      </p>
+      <div className="flex justify-center">
+        <button onClick={handleShowListings} className="w-auto bg-yellow-600 hover:bg-yellow-300 text-white font-bold py-2 px-4 rounded">
+          Show Listings
+        </button>
+      </div>
 
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">

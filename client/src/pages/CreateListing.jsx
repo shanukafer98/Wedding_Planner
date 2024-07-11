@@ -272,14 +272,17 @@ export default function CreateListing() {
               onChange={handleChange}
               value={formData.categorie} // value categorie
             >
-               <option value="dj">DJ</option>
+              <option value="dj">DJ</option>
               <option value="hotel">Hotel</option>
-              <option value="catering">Catering</option>
               <option value="photography">Photography</option>
-              <option value="venue">Venue</option>
-              <option value="decoration">Decoration</option>
-              <option value="weddingCake">Cake</option>
-              <option value="vehicleRental">Vehicle Rental</option>
+              <option value="venue">Photo Locations</option>
+              <option value="decoration">Flower Decorations</option>
+              <option value="poruwa">Poruwa/Seti Back</option>
+              <option value="weddingCakes">Wedding Cakes</option>
+              <option value="vehicleRental">Wedding Cars</option>
+              <option value="ashtaka">Ashtaka</option>
+              <option value="dancing">Dancing</option>
+              <option value="bera">Bera</option>
             </select>
           </div>
           <div className="flex flex-col gap-4">
