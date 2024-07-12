@@ -368,13 +368,13 @@ export default function CreateListing() {
               className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 mt-4"
               onClick={handleImageSubmit}
             >
-              Upload Images
+              Upload Image
             </button>
            
           </div>
           {formData.imageUrls.length > 0 && (
             <div className="mt-4">
-              <h3 className="text-lg font-semibold">Uploaded Images:</h3>
+              <h3 className="text-lg font-semibold">Uploaded Image:</h3>
               <div className="flex flex-wrap gap-4 mt-2">
                 {formData.imageUrls.map((url, index) => (
                   <div key={index} className="relative">
