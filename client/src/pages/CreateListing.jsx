@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -24,9 +24,14 @@ export default function CreateListing() {
     regularPrice: 50,
     categorie: "",
     district: "",
-    contactNumber1: "", // Adding contact number fields
-    contactNumber2: "", // Adding contact number fields
+    contactNumber1: "",
+    contactNumber2: "",
   });
+
+useEffect(() => {
+
+  console.log(formData)
+}, [formData]);
 
   const [imageUploading, setImageUploading] = useState(false);
   const [videoUploading, setVideoUploading] = useState(false);
@@ -49,21 +54,17 @@ export default function CreateListing() {
             ...formData,
             imageUrls: formData.imageUrls.concat(urls),
           });
-   
+
           setImageUploading(false);
-         
         })
         .catch((err) => {
-          
           setImageUploading(false);
           toast.error("Image upload failed (2 mb max per image)");
         });
     } else {
-
       setImageUploading(false);
-     
-      toast('Please select an image to upload!', {
-        icon: '💡',
+      toast("Please select an image to upload!", {
+        icon: "💡",
       });
     }
   };
@@ -71,8 +72,6 @@ export default function CreateListing() {
   const handleVideoSubmit = (e) => {
     if (video) {
       if (video.size > 100 * 1024 * 1024) {
-        // 100 MB size limit
- 
         toast.error("Video size should be under 100 MB");
         return;
       }
@@ -84,20 +83,16 @@ export default function CreateListing() {
             ...formData,
             videoUrl: url,
           });
-  
+
           setVideoUploading(false);
-         
         })
         .catch((err) => {
-      
           setVideoUploading(false);
           toast.error("Video upload failed (100 mb max per video)");
         });
     } else {
-    
-     
-      toast('Please select an  to upload!', {
-        icon: '💡',
+      toast("Please select a video to upload!", {
+        icon: "💡",
       });
     }
   };
@@ -132,7 +127,6 @@ export default function CreateListing() {
         {
           loading: "Uploading...",
           success: "Upload successful!",
-       
         }
       );
     });
@@ -181,12 +175,11 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.imageUrls.length < 1)
-        return setError("You must upload at least one image");
-      if (!formData.contactNumber1 && !formData.contactNumber2)
-        return setError("You must provide at least one contact number");
+      if (formData.imageUrls.length < 1) return setError("You must upload at least one image");
+      if (!formData.contactNumber1 && !formData.contactNumber2) return setError("You must provide at least one contact number");
       setLoading(true);
       setError(false);
+      console.log("Submitting form data:", formData);
       const res = await fetch("/api/listing/create", {
         method: "POST",
         headers: {
@@ -201,8 +194,9 @@ export default function CreateListing() {
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
+      } else {
+        navigate(`/listing/${data._id}`);
       }
-      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -227,15 +221,15 @@ export default function CreateListing() {
             onChange={handleChange}
             value={formData.title}
           />
+          <pre>
           <textarea
-            type="text"
             placeholder="Description"
             className="border p-3 rounded-lg"
             id="description"
             required
             onChange={handleChange}
             value={formData.description}
-          />
+          /></pre>
           <input
             type="text"
             placeholder="Address"
@@ -270,7 +264,7 @@ export default function CreateListing() {
               id="categorie"
               className="border p-3 rounded-lg"
               onChange={handleChange}
-              value={formData.categorie} // value categorie
+              value={formData.categorie}
             >
               <option value="dj">DJ</option>
               <option value="hotel">Hotel</option>
@@ -293,7 +287,7 @@ export default function CreateListing() {
               id="district"
               className="border p-3 rounded-lg"
               onChange={handleChange}
-              value={formData.district} // value district
+              value={formData.district}
             >
               <option value="Ampara">Ampara</option>
               <option value="Anuradhapura">Anuradhapura</option>
@@ -370,7 +364,6 @@ export default function CreateListing() {
             >
               Upload Image
             </button>
-           
           </div>
           {formData.imageUrls.length > 0 && (
             <div className="mt-4">
@@ -413,7 +406,6 @@ export default function CreateListing() {
             >
               Upload Video
             </button>
-          
           </div>
           {formData.videoUrl && (
             <div className="mt-4">
@@ -434,17 +426,20 @@ export default function CreateListing() {
               </div>
             </div>
           )}
-        </div>
-      </form>
+       
+      
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
       <div className="text-center mt-4">
         <button
+          type="submit"
           disabled={loading || imageUploading || videoUploading}
           className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
           {loading ? "Creating..." : "Create listing"}
         </button>
       </div>
+      </div>
+      </form>
     </main>
   );
 }
