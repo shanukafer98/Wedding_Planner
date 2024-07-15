@@ -9,6 +9,9 @@ import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import apiFetch from '../api/api';  
+
+
 
 export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -32,7 +35,7 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await fetch(`/api/listing/get/${listingId}`);
+      const res = await apiFetch(`/api/listing/get/${listingId}`);
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
@@ -196,7 +199,7 @@ export default function UpdateListing() {
     }
     setLoading(true);
     setError(false);
-    const res = await fetch(`/api/listing/update/${params.listingId}`, {
+    const res = await apiFetch(`/api/listing/update/${params.listingId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

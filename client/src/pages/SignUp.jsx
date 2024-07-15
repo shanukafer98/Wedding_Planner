@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../firebase';
 import OAuth  from '../components/OAuth';
+import apiFetch from '../api/api';  
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -30,7 +31,7 @@ export default function SignUp() {
         password: formData.password,
       };
 
-      const response = await fetch('/api/auth/signup', {
+      const response = await apiFetch('/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

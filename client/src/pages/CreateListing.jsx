@@ -9,6 +9,7 @@ import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import apiFetch from '../api/api';  
 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -180,7 +181,7 @@ useEffect(() => {
       setLoading(true);
       setError(false);
       console.log("Submitting form data:", formData);
-      const res = await fetch("/api/listing/create", {
+      const res = await apiFetch("/api/listing/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

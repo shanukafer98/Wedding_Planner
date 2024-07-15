@@ -5,6 +5,7 @@ import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 import ListingItem from '../components/ListingItem';
 import {ring} from '../assets';
+import apiFetch from '../api/api';  
 
 
 export default function Home() {
@@ -34,7 +35,7 @@ export default function Home() {
 
     const fetchDjListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=dj&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=dj&limit=4');
         const data = await res.json();
         setDjListings(data);
       
@@ -45,7 +46,7 @@ export default function Home() {
 
     const fetchHotelListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=hotel&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=hotel&limit=4');
         const data = await res.json();
         setHotelListings(data);
       }
@@ -56,7 +57,7 @@ export default function Home() {
 
     const fetchPhotographyListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=photography&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=photography&limit=4');
         const data = await res.json();
         setPhotographyListings(data);
       }
@@ -67,7 +68,7 @@ export default function Home() {
 
     const fetchDecorationListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=decoration&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=decoration&limit=4');
         const data = await res.json();
         setDecorationListings(data);
       }
@@ -78,7 +79,7 @@ export default function Home() {
 
     const fetchAshatakaListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=ashataka&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=ashataka&limit=4');
         const data = await res.json();
         setAshatakaListings(data);
       }
@@ -89,7 +90,7 @@ export default function Home() {
 
     const fetchVehicleRentalListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=vehicleRental&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=vehicleRental&limit=4');
         const data = await res.json();
         setVehicleRentalListings(data);
       }
@@ -100,7 +101,7 @@ export default function Home() {
 
     const fetchWeddingCakeListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=weddingCake&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=weddingCake&limit=4');
         const data = await res.json();
         setWeddingCakeListings(data);
       }
@@ -111,7 +112,7 @@ export default function Home() {
 
     const fetchVenueListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=venue&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=venue&limit=4');
         const data = await res.json();
         setVenueListings(data);
       }
@@ -123,7 +124,7 @@ export default function Home() {
 
     const fetchPoruwaListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=poruwa&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=poruwa&limit=4');
         const data = await res.json();
         setPoruwaListings(data);
       }
@@ -134,7 +135,7 @@ export default function Home() {
 
     const fetchDancingListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=dancing&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=dancing&limit=4');
         const data = await res.json();
         setDancingListings(data);
       }
@@ -146,7 +147,7 @@ export default function Home() {
 
     const fetchBeraListings = async () => {
       try {
-        const res = await fetch('/api/listing/get?categorie=bera&limit=4');
+        const res = await apiFetch('/api/listing/get?categorie=bera&limit=4');
         const data = await res.json();
         setBeraListings(data);
       }

@@ -1,10 +1,12 @@
 import { useState } from 'react';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
 import { auth, signInWithEmailAndPassword } from '../firebase';
+import apiFetch from '../api/api';  
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -31,7 +33,7 @@ export default function SignIn() {
         return;
       }
       const token = await userCredential.user.getIdToken();
-      const res = await fetch('/api/auth/signin', {
+      const res = await apiFetch('/api/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
