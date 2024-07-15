@@ -23,6 +23,7 @@ const __dirname = path.resolve();
 
 const app = express(); // Move this line before using app
 
+
 app.use(cors());
 
 app.use(express.json());
