@@ -1,9 +1,28 @@
 {
-
     "routes": [
-        {
-            "src": "/[^.]+",
-            "dest":"/"
-        }
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin"
+          },
+          {
+            "key": "Cross-Origin-Embedder-Policy",
+            "value": "require-corp"
+          }
+        ]
+      }
     ]
-}
+  }
+  
