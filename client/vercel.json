@@ -1,9 +1,11 @@
 {
-    "routes": [
+    "rewrites": [
       {
-        "src": "/api/(.*)",
-        "dest": "/api/$1"
-      },
+        "source": "/api/:path*",
+        "destination": "https://wedding-plannerback-shanukafer98s-projects.vercel.app/api/:path*"
+      }
+    ],
+    "routes": [
       {
         "src": "/static/(.*)",
         "dest": "/static/$1"
