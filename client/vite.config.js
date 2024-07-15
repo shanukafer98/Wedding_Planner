@@ -5,7 +5,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://wedding-plannerback-ge2a313u1-shanukafer98s-projects.vercel.app',
+        target: 'https://wedding-plannerback-shanukafer98s-projects.vercel.app',
         secure: false, // Disable SSL certificate validation
         changeOrigin: true,
       },
