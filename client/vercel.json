@@ -6,10 +6,7 @@
       },
       {
         "src": "/static/(.*)",
-        "dest": "/static/$1",
-        "headers": {
-          "Content-Type": "application/javascript"
-        }
+        "dest": "/static/$1"
       },
       {
         "src": "/(.*)\\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)",
