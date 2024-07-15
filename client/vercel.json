@@ -5,9 +5,19 @@
         "dest": "/api/$1"
       },
       {
+        "src": "/static/(.*)",
+        "dest": "/static/$1",
+        "headers": {
+          "Content-Type": "application/javascript"
+        }
+      },
+      {
+        "src": "/(.*)\\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)",
+        "dest": "/$1.$2"
+      },
+      {
         "src": "/(.*)",
         "dest": "/index.html"
       }
-   
     ]
   }
