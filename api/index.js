@@ -17,13 +17,18 @@ mongoose
     console.log(err);
   });
 
-  const __dirname = path.resolve();
+const __dirname = path.resolve();
 
 const app = express();
 
 app.use(express.json());
-
 app.use(cookieParser());
+
+// Add COOP header middleware
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  next();
+});
 
 const port = process.env.PORT || 3000;
 
@@ -31,11 +36,9 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 })
 
-
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
-
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
