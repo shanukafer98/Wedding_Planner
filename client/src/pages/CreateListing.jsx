@@ -208,7 +208,7 @@ useEffect(() => {
       <h1 className="text-3xl font-semibold text-center my-7">
         Create a Listing
       </h1>
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-10 shadow-2xl p-10">
         <div className="flex flex-col gap-4 flex-1">
           <input
             type="text"
@@ -221,7 +221,7 @@ useEffect(() => {
             onChange={handleChange}
             value={formData.title}
           />
-          <pre>
+         
           <textarea
             placeholder="Description"
             className="border p-3 rounded-lg"
@@ -229,7 +229,7 @@ useEffect(() => {
             required
             onChange={handleChange}
             value={formData.description}
-          /></pre>
+          />
           <input
             type="text"
             placeholder="Address"
@@ -359,7 +359,7 @@ useEffect(() => {
             />
             <button
               type="button"
-              className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 mt-4"
+              className="p-3 bg-blue-500 hover:bg-blue-800 text-white rounded-lg uppercase hover:opacity-95 mt-4"
               onClick={handleImageSubmit}
             >
               Upload Image
@@ -401,7 +401,7 @@ useEffect(() => {
             />
             <button
               type="button"
-              className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 mt-4"
+              className="p-3 bg-blue-500 hover:bg-blue-800 text-white rounded-lg uppercase hover:opacity-95 mt-4"
               onClick={handleVideoSubmit}
             >
               Upload Video
@@ -429,17 +429,20 @@ useEffect(() => {
        
       
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
-      <div className="text-center mt-4">
+ 
+      </div>
+      </form>
+      <div className="flex justify-center">
         <button
           type="submit"
+          onClick={handleSubmit}
           disabled={loading || imageUploading || videoUploading}
-          className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          className="bg-green-500 hover:bg-green-800  text-white px-6 py-3 rounded mt-4"
         >
           {loading ? "Creating..." : "Create listing"}
         </button>
       </div>
-      </div>
-      </form>
+    
     </main>
   );
 }

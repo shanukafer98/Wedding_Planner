@@ -2,28 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
-import { useSelector } from "react-redux";
+import Modal from "react-modal";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import {
-  FaMapMarkerAlt,
-  FaShare,
-  FaConciergeBell,
-  FaMusic,
-  FaUtensils,
-  FaHeart,
-} from "react-icons/fa";
-import Contact from "../components/Contact";
+import { FaMapMarkerAlt, FaShare } from "react-icons/fa";
+
+SwiperCore.use([Navigation]);
 
 export default function Listing() {
-  SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [contact, setContact] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const params = useParams();
-  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -96,7 +89,7 @@ export default function Listing() {
             )}
           </Swiper>
 
-          <div className="fixed top-[13%] right-[3%] z-10  border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
+          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
             <FaShare
               className="text-slate-500"
               onClick={() => {
@@ -114,67 +107,53 @@ export default function Listing() {
             </p>
           )}
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
-            <p className="text-4xl font-extrabold font-serif">
-              {listing.title}
-            </p>
+            <p className="text-4xl font-extrabold font-serif">{listing.title}</p>
             <div className="my-3 text-2xl font-semibold">
               {listing.regularPrice.toLocaleString("lkr-LK", {
                 style: "currency",
                 currency: "LKR",
               })}{" "}
             </div>
-           
             <p className="flex items-center mt-4 gap-2 text-slate-600 text-lg font-bold">
               <FaMapMarkerAlt className="text-green-700" />
               {listing.district}
             </p>
-            {/* <div className="flex gap-4">
-              <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-              {capitalizeFirstLetter(listing.categorie)}
-              </p>
-            </div> */}
             <p className="text-slate-800 my-4">
-              <span className="font-semibold text-2xl  text-black ">Description</span>
+              <span className="font-semibold text-2xl text-black">
+                Description
+              </span>
               <p className="whitespace-pre-wrap">{listing.description}</p>
             </p>
-            {/* <ul className='text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6'>
-              {listing.type === 'Catering' && (
-                <li className='flex items-center gap-1 whitespace-nowrap '>
-                  <FaUtensils className='text-lg' />
-                  Catering Service
-                </li>
-              )}
-              {listing.type === 'DJ' && (
-                <li className='flex items-center gap-1 whitespace-nowrap '>
-                  <FaMusic className='text-lg' />
-                  DJ Service
-                </li>
-              )}
-              {listing.type === 'Planner' && (
-                <li className='flex items-center gap-1 whitespace-nowrap '>
-                  <FaConciergeBell className='text-lg' />
-                  Wedding Planner
-                </li>
-              )}
-              {listing.type === 'Venue' && (
-                <li className='flex items-center gap-1 whitespace-nowrap '>
-                  <FaHeart className='text-lg' />
-                  Wedding Venue
-                </li>
-              )}
-            </ul> */}
-            {currentUser && listing.userRef !== currentUser._id && !contact && (
-              <button
-                onClick={() => setContact(true)}
-                className="bg-red-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
-              >
-                Contact service provider
-              </button>
-            )}
-            {contact && <Contact listing={listing} />}
+            <button 
+              onClick={() => setModalIsOpen(true)}
+              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 w-1/2"
+            >
+              Contact Details
+            </button>
           </div>
         </div>
       )}
+
+      <Modal 
+        isOpen={modalIsOpen} 
+        onRequestClose={() => setModalIsOpen(false)} 
+        contentLabel="Contact Information"
+        className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="bg-white p-5 rounded-md max-w-md w-full">
+          <h2 className="text-xl font-bold mb-4">Contact Information</h2>
+          <p><strong>Contact Number 1:</strong> <a href={`tel:${listing?.contactNumber1}`} className="text-blue-500 underline">{listing?.contactNumber1}</a></p>
+          <p><strong>Contact Number 2:</strong> <a href={`tel:${listing?.contactNumber2}`} className="text-blue-500 underline">{listing?.contactNumber2}</a></p>
+          <p><strong>Address:</strong> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(listing?.address)}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">{listing?.address}</a></p>
+          <button 
+            onClick={() => setModalIsOpen(false)}
+            className="bg-red-500 text-white p-2 rounded-md mt-4"
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </main>
   );
 }

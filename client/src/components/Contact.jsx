@@ -1,51 +1,53 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 export default function Contact({ listing }) {
-  const [landlord, setLandlord] = useState(null);
-  const [message, setMessage] = useState('');
-  const onChange = (e) => {
-    setMessage(e.target.value);
-  };
+  const [serviceProvider, setServiceProvider] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchLandlord = async () => {
+    const fetchServiceProvider = async () => {
       try {
         const res = await fetch(`/api/user/${listing.userRef}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch service provider details');
+        }
         const data = await res.json();
-        setLandlord(data);
+        setServiceProvider(data);
       } catch (error) {
-        console.log(error);
+        setError(error.message);
       }
     };
-    fetchLandlord();
+    fetchServiceProvider();
   }, [listing.userRef]);
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
+
   return (
     <>
-      {landlord && (
+      {serviceProvider ? (
         <div className='flex flex-col gap-2'>
           <p>
-            Contact <span className='font-semibold'>{landlord.username}</span>{' '}
-            for{' '}
-            <span className='font-semibold'>{listing.name.toLowerCase()}</span>
+            Contact <span className='font-semibold'>{serviceProvider.username}</span> for{' '}
+            <span className='font-semibold'>{listing.title.toLowerCase()}</span>
           </p>
-          <textarea
-            name='message'
-            id='message'
-            rows='2'
-            value={message}
-            onChange={onChange}
-            placeholder='Enter your message here...'
-            className='w-full border p-3 rounded-lg'
-          ></textarea>
-
-          <Link
-          to={`mailto:${landlord.email}?subject=Regarding ${listing.title}&body=${message}`}
-          className='bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95'
-          >
-            Send Message          
-          </Link>
+          <div>
+            <p>
+              <span className='font-semibold'>Primary Contact Number:</span> {serviceProvider.contactNumber1}
+            </p>
+            {serviceProvider.contactNumber2 && (
+              <p>
+                <span className='font-semibold'>Secondary Contact Number:</span> {serviceProvider.contactNumber2}
+              </p>
+            )}
+            <p>
+              <span className='font-semibold'>Address:</span> {serviceProvider.address}
+            </p>
+          </div>
         </div>
+      ) : (
+        <p>Loading contact details...</p>
       )}
     </>
   );

@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
-  const navigate = useNavigate();
-
+  
   return (
     <header className='bg-transparent-50 shadow-md'>
       <div className='flex justify-between items-center max-w-7xl mx-auto p-3'>
@@ -20,11 +19,7 @@ export default function Header() {
               Home
             </li>
           </Link>
-          <Link to='/about'>
-            <li className='hidden sm:inline text-slate-700  text-lg font-bold hover:text-slate-300'>
-              About
-            </li>
-          </Link>
+       
           <Link to='/profile'>
             {currentUser ? (
               <img

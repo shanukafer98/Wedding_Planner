@@ -1,13 +1,9 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "wedding-planner-9952c.firebaseapp.com",
   projectId: "wedding-planner-9952c",
   storageBucket: "wedding-planner-9952c.appspot.com",
@@ -16,5 +12,8 @@ const firebaseConfig = {
   measurementId: "G-GTPD3RT4ZZ"
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+export { app, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, storage };

@@ -230,8 +230,8 @@ export default function UpdateListing() {
       <h1 className="text-3xl font-semibold text-center my-7">
         Update a Listing
       </h1>
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
-        <div className="flex flex-col gap-4 flex-1">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-10 shadow-2xl p-10">
+        <div className="flex flex-col gap-4 flex-1 ">
           <input
             type="text"
             placeholder="Title"
@@ -428,7 +428,7 @@ export default function UpdateListing() {
                   type="button"
                   onClick={handleVideoSubmit}
                   disabled={videoUploading}
-                  className="bg-blue-500 text-white px-3 py-1 rounded mt-2"
+                  className="bg-blue-500 hover:bg-blue-800 text-white px-3 py-1 rounded mt-2"
                 >
                   {videoUploading ? "Uploading..." : "Upload Video"}
                 </button>
@@ -440,14 +440,17 @@ export default function UpdateListing() {
       {error && (
         <div className="bg-red-500 text-white p-3 rounded mt-4">{error}</div>
       )}
+      <div className="flex justify-center">
       <button
         type="submit"
         onClick={handleSubmit}
         disabled={loading}
-        className="bg-green-500 text-white px-6 py-3 rounded mt-4"
+        className="bg-green-500 hover:bg-green-800  text-white px-6 py-3 rounded mt-4"
       >
         {loading ? "Updating..." : "Update Listing"}
       </button>
+      </div>
+      
     </main>
   );
 }

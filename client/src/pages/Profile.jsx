@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState, useEffect } from "react";
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import { app } from "../firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { app, storage } from "../firebase";  // import storage from firebase.js
 import {
   updateUserStart,
   updateUserSuccess,
@@ -30,9 +30,8 @@ export default function Profile() {
   }, [file]);
 
   const handleFileUpload = (file) => {
-    const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
+    const storageRef = ref(storage, fileName); // using storage here
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
