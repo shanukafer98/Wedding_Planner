@@ -11,6 +11,15 @@
     ],
     "headers": [
       {
+        "source": "/path-needing-different-coop/(.*)",
+        "headers": [
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "unsafe-none"
+          }
+        ]
+      },
+      {
         "source": "/(.*)",
         "headers": [
           {
@@ -25,4 +34,3 @@
       }
     ]
   }
-  
