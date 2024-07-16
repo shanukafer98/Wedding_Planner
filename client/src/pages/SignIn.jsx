@@ -1,16 +1,15 @@
 import { useState } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
 import { auth, signInWithEmailAndPassword } from '../firebase';
-import apiFetch from '../api/api';  
+const url = import.meta.env.VITE_BACKEND_URL;
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const { loading} = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -33,7 +32,7 @@ export default function SignIn() {
         return;
       }
       const token = await userCredential.user.getIdToken();
-      const res = await apiFetch('/api/auth/signin', {
+      const res = await fetch(`${url}/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +89,6 @@ export default function SignIn() {
           <span className='text-blue-700'>Sign up</span>
         </Link>
       </div>
-   
     </div>
   );
 }

@@ -9,9 +9,7 @@ import { app } from "../firebase";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import apiFetch from '../api/api';  
-
-
+const url = import.meta.env.VITE_BACKEND_URL;
 
 export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -35,10 +33,10 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await apiFetch(`/api/listing/get/${listingId}`);
+      const res = await fetch(`${url}/api/listing/get/${listingId}`);
       const data = await res.json();
-      if (data.success === false) {
-        console.log(data.message);
+      if (!res.ok) {
+        console.error(data.message);
         return;
       }
       setFormData(data);
@@ -57,18 +55,13 @@ export default function UpdateListing() {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setImageUploading(true);
 
-      const promises = [];
-
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeMedia(files[i]));
-      }
+      const promises = files.map(file => storeMedia(file));
       Promise.all(promises)
         .then((urls) => {
           setFormData({
             ...formData,
             imageUrls: formData.imageUrls.concat(urls),
           });
-
           setImageUploading(false);
         })
         .catch((err) => {
@@ -97,7 +90,6 @@ export default function UpdateListing() {
             ...formData,
             videoUrl: url,
           });
-
           setVideoUploading(false);
         })
         .catch((err) => {
@@ -186,46 +178,47 @@ export default function UpdateListing() {
     }
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    if (formData.imageUrls.length < 1) {
-      toast.error("You must upload at least one image");
-      return setError("You must upload at least one image");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (formData.imageUrls.length < 1) {
+        toast.error("You must upload at least one image");
+        return setError("You must upload at least one image");
+      }
+      if (!formData.contactNumber1 && !formData.contactNumber2) {
+        toast.error("You must provide at least one contact number");
+        return setError("You must provide at least one contact number");
+      }
+      setLoading(true);
+      setError(false);
+      const res = await fetch(`${url}/api/listing/update/${params.listingId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          userRef: currentUser._id,
+        }),
+      });
+      const data = await res.json();
+      setLoading(false);
+      if (!res.ok) {
+        setError(data.message);
+        toast.error(data.message);
+      } else {
+        toast.success("Listing updated successfully");
+        navigate(`/listing/${data._id}`);
+      }
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+      toast.error("Update failed");
     }
-    if (!formData.contactNumber1 && !formData.contactNumber2) {
-      toast.error("You must provide at least one contact number");
-      return setError("You must provide at least one contact number");
-    }
-    setLoading(true);
-    setError(false);
-    const res = await apiFetch(`/api/listing/update/${params.listingId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...formData,
-        userRef: currentUser._id,
-      }),
-    });
-    const data = await res.json();
-    console.log(data);
-    setLoading(false);
-    // if (!data.success) {
-    //   setError(data.message);
-    //   toast.error(data.message);
-    //   console.log(data.message)
-    // } else {
-      toast.success("Listing updated successfully");
-      navigate(`/listing/${data._id}`);
-    // }
-  } catch (error) {
-    setError(error.message);
-    setLoading(false);
-    toast.error("Update failed");
-  }
-};
+  };
+
+
+
 
 
   return (

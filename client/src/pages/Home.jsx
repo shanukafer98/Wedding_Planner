@@ -5,7 +5,8 @@ import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
 import ListingItem from '../components/ListingItem';
 import {ring} from '../assets';
-import apiFetch from '../api/api';  
+
+
 
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
   const [ashatakaListings, setAshatakaListings] = useState([]);
   const [dancingListings, setDancingListings] = useState([]);
   const [beraListings, setBeraListings] = useState([]);
+  const url = import.meta.env.VITE_BACKEND_URL;
 
 
 
@@ -31,14 +33,11 @@ export default function Home() {
 
 
   useEffect(() => {
-  
-
     const fetchDjListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=dj&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=dj&limit=4`);
         const data = await res.json();
         setDjListings(data);
-      
       } catch (error) {
         console.log(error);
       }
@@ -46,115 +45,105 @@ export default function Home() {
 
     const fetchHotelListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=hotel&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=hotel&limit=4`);
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await res.json();
         setHotelListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchPhotographyListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=photography&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=photography&limit=4`);
         const data = await res.json();
         setPhotographyListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchDecorationListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=decoration&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=decoration&limit=4`);
         const data = await res.json();
         setDecorationListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchAshatakaListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=ashataka&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=ashataka&limit=4`);
         const data = await res.json();
         setAshatakaListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchVehicleRentalListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=vehicleRental&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=vehicleRental&limit=4`);
         const data = await res.json();
         setVehicleRentalListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchWeddingCakeListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=weddingCake&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=weddingCake&limit=4`);
         const data = await res.json();
         setWeddingCakeListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchVenueListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=venue&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=venue&limit=4`);
         const data = await res.json();
         setVenueListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
-
     const fetchPoruwaListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=poruwa&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=poruwa&limit=4`);
         const data = await res.json();
         setPoruwaListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
     };
 
     const fetchDancingListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=dancing&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=dancing&limit=4`);
         const data = await res.json();
         setDancingListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
-    };  
-
+    };
 
     const fetchBeraListings = async () => {
       try {
-        const res = await apiFetch('/api/listing/get?categorie=bera&limit=4');
+        const res = await fetch(`${url}/api/listing/get?categorie=bera&limit=4`);
         const data = await res.json();
         setBeraListings(data);
-      }
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
-      
     };
 
 

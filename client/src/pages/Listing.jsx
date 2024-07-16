@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { FaMapMarkerAlt, FaShare } from "react-icons/fa";
-import apiFetch from '../api/api';  
+
 
 SwiperCore.use([Navigation]);
 
@@ -16,6 +16,7 @@ export default function Listing() {
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   const params = useParams();
 
@@ -23,7 +24,7 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await apiFetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(`${url}/api/listing/get/${params.listingId}`);
         const data = await res.json();
         if (data.success === false) {
           setError(true);

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../firebase';
-import OAuth  from '../components/OAuth';
-import apiFetch from '../api/api';  
+import OAuth from '../components/OAuth';
+const url = import.meta.env.VITE_BACKEND_URL;
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -31,7 +31,7 @@ export default function SignUp() {
         password: formData.password,
       };
 
-      const response = await apiFetch('/api/auth/signup', {
+      const response = await fetch(`${url}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function SignUp() {
         toast.success('Sign up successful! Please check your email to verify your account.');
         navigate('/sign-in');
       } else {
-        throw new Error(data);
+        throw new Error(data.message || 'Failed to sign up');
       }
     } catch (error) {
       setLoading(false);

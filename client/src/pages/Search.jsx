@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
-import apiFetch from '../api/api';  
+const url = import.meta.env.VITE_BACKEND_URL;
 
 export default function Search() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function Search() {
         setLoading(true);
         setShowMore(false);
         const searchQuery = urlParams.toString();
-        const res = await apiFetch(`/api/listing/get?${searchQuery}`);
+        const res = await fetch(`${url}/api/listing/get?${searchQuery}`);
         if (!res.ok) {
           throw new Error("Network response was not ok");
         }
@@ -82,7 +82,7 @@ export default function Search() {
       const urlParams = new URLSearchParams(location.search);
       urlParams.set("startIndex", startIndex);
       const searchQuery = urlParams.toString();
-      const res = await apiFetch(`/api/listing/get?${searchQuery}`);
+      const res = await fetch(`${url}/api/listing/get?${searchQuery}`);
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }

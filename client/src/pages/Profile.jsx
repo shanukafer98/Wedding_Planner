@@ -13,7 +13,8 @@ import {
 } from "../redux/user/userSlice";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import apiFetch from '../api/api';  
+ 
+const url = import.meta.env.VITE_BACKEND_URL;
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -60,7 +61,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await apiFetch(`/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`${url}/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +85,7 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await apiFetch(`/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`${url}/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -104,7 +105,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await apiFetch("/api/auth/signout");
+      const res = await fetch(`${url}/api/auth/signout`);
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
@@ -121,10 +122,10 @@ export default function Profile() {
 
   const handleShowListings = async () => {
     try {
-      const res = await apiFetch(`/api/user/listings/${currentUser._id}`);
+      const res = await fetch(`${url}/api/user/listings/${currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
-        toast.error("There is no listings to show");
+        toast.error("There are no listings to show");
         return;
       }
       setUserListings(data);
@@ -135,7 +136,7 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await apiFetch(`/api/listing/delete/${listingId}`, {
+      const res = await fetch(`${url}/api/listing/delete/${listingId}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -149,6 +150,7 @@ export default function Profile() {
       toast.error(error.message);
     }
   };
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
