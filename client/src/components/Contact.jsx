@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react';
 export default function Contact({ listing }) {
   const [serviceProvider, setServiceProvider] = useState(null);
   const [error, setError] = useState(null);
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchServiceProvider = async () => {
       try {
-        const res = await fetch(`/api/user/${listing.userRef}`);
+        const res = await fetch(`${url}/api/user/${listing.userRef}`);
         if (!res.ok) {
           throw new Error('Failed to fetch service provider details');
         }

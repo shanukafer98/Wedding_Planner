@@ -5,13 +5,14 @@ import { toast } from 'react-hot-toast';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
 import { auth, signInWithEmailAndPassword } from '../firebase';
-const url = import.meta.env.VITE_BACKEND_URL;
+
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   const handleChange = (e) => {
     setFormData({

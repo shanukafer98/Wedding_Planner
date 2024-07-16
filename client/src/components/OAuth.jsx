@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   const handleGoogleClick = async () => {
     try {
@@ -15,7 +16,7 @@ export default function OAuth() {
       
       const result = await signInWithPopup(auth, provider);
 
-      const res = await fetch('/api/auth/google', {
+      const res = await fetch(`${url}/api/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
