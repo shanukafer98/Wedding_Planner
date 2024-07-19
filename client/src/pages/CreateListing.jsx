@@ -181,11 +181,14 @@ useEffect(() => {
       if (!formData.contactNumber1 && !formData.contactNumber2) return setError("You must provide at least one contact number");
       setLoading(true);
       setError(false);
+      
       console.log("Submitting form data:", formData);
+
       const res = await fetch(`${url}/api/listing/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // "Authorization": `Bearer ${currentUser.token}`
         },
         body: JSON.stringify({
           ...formData,

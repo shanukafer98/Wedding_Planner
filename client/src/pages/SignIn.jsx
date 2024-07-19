@@ -27,30 +27,47 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      
       if (!userCredential.user.emailVerified) {
         dispatch(signInFailure('Email not verified. Please verify your email.'));
         toast.error('Email not verified. Please verify your email.');
         return;
       }
-      const token = await userCredential.user.getIdToken();
+      
+      // // Generate the token
+      const token = await userCredential.user.getIdToken(true);
+      console.log('Generated Token:', token); // For debugging
+
+      // // Verify the token is generated correctly
+      if (!token) {
+        throw new Error('Failed to generate authentication token.');
+      }
+
+      // Send token to the backend
       const res = await fetch(`${url}/api/auth/signin`, {
         method: 'POST',
+        
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+       
         },
         body: JSON.stringify(formData),
       });
+
+      // Check the response
       const data = await res.json();
       if (data.success === false) {
         dispatch(signInFailure(data.message));
         toast.error(data.message);
         return;
       }
+
+      // Successful sign in
       dispatch(signInSuccess(data));
       toast.success('Sign In Successful!');
       navigate('/');
     } catch (error) {
+      console.error('Sign In Error:', error); // Log error for debugging
       dispatch(signInFailure(error.message));
       toast.error(error.message);
     }
@@ -78,7 +95,7 @@ export default function SignIn() {
         />
         <button
           disabled={loading}
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
+          className='bg-slate-700 hover:bg-slate-500 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
         >
           {loading ? 'Loading...' : 'Sign In'}
         </button>
@@ -87,7 +104,7 @@ export default function SignIn() {
       <div className='flex gap-2 mt-5'>
         <p> Don't have an account?</p>
         <Link to={'/sign-up'}>
-          <span className='text-blue-700'>Sign up</span>
+          <span className='text-blue-700 hover:underline'>Sign up</span>
         </Link>
       </div>
     </div>

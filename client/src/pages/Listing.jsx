@@ -7,7 +7,6 @@ import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { FaMapMarkerAlt, FaShare } from "react-icons/fa";
 
-
 SwiperCore.use([Navigation]);
 
 export default function Listing() {
@@ -140,10 +139,10 @@ export default function Listing() {
         isOpen={modalIsOpen} 
         onRequestClose={() => setModalIsOpen(false)} 
         contentLabel="Contact Information"
-        className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+        className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 overflow-y-auto p-4"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
       >
-        <div className="bg-white p-5 rounded-md max-w-md w-full">
+        <div className="bg-white p-5 rounded-md max-w-md w-full ">
           <h2 className="text-xl font-bold mb-4">Contact Information</h2>
           <p><strong>Contact Number 1:</strong> <a href={`tel:${listing?.contactNumber1}`} className="text-blue-500 underline">{listing?.contactNumber1}</a></p>
           <p><strong>Contact Number 2:</strong> <a href={`tel:${listing?.contactNumber2}`} className="text-blue-500 underline">{listing?.contactNumber2}</a></p>

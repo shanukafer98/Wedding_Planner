@@ -35,6 +35,21 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+app.use(cors(
+  {
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  }
+));
+
+
+
+
+
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
