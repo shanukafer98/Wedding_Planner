@@ -44,7 +44,7 @@ export default function SignIn() {
       }
 
       // Send token to the backend
-      const res = await fetch(`${url}/api/auth/signin`, {
+      const res = await fetch("/api/auth/signin", {
         method: 'POST',
         
         headers: {
